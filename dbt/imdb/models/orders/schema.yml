@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+- name: default # эта хуйня должна совпадать с названием БД, в которой таблички
+  tables:
+  - name: district
+  - name: orders
+  - name: orders_norm

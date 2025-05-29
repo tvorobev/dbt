@@ -1,0 +1,12 @@
+local_clickhouse:
+  target: prod
+  outputs:
+    prod:  # additional prod target
+      type: clickhouse
+      host: some-clickhouse-server
+      driver: http
+      user: dbt
+      password: 'user123'
+      port: 8123
+      dbname: default
+      threads: 8
