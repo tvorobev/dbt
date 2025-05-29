@@ -1,3 +1,4 @@
 .user.yml
 docs
 logs/
+.DS_Store
