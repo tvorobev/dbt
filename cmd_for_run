@@ -1,5 +1,0 @@
-docker run \
---network=datalens_default \
---mount type=bind,source=/Users/trofim/Desktop/dbt/dbt/imdb,target=/usr/app \
---mount type=bind,source=/Users/trofim/Desktop/dbt/profiles.yml,target=/root/.dbt/profiles.yml \
---rm -it dbt-clickhouse debug
