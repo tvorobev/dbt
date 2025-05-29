@@ -1,8 +1,24 @@
 version: 2
 
 sources:
-- name: default # эта хуйня должна совпадать с названием БД, в которой таблички
+- name: default # должен совпадать с названием БД, в которой таблички
+  description: data from source about orders and district
   tables:
   - name: district
+    description: '{{ doc("district_table") }}'
+    columns:
+      - name: OrderID
+        description: ID order 
+        tests:
+          - not_null
+      - name: DeliveryDistrictName
+        description: "*Name Delivery District*"
+        tests:
+          - not_null
   - name: orders
-  - name: orders_norm
+    description: data from REST API <host> about orders, ETL on Spark
+    columns:
+      - name: OrderID
+        description: ID order 
+      - name: OrderDate
+        description: Date orders
