@@ -1,6 +1,7 @@
 .user.yml
 docs
 logs/
+dbt/logs/
 .DS_Store
 dbt/.DS_Store
 dbt/imdb/.DS_Store
