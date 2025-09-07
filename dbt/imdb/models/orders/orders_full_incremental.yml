@@ -1,0 +1,52 @@
+models:
+  - name: orders_full_incremental # модель
+    config:
+      materialized: incremental # инкрементальная материализация
+      incremental_strategy: append # стратегия обновления append - только добавление новых записей, без учета изменений старых записей
+      on_schema_change: fail # если схема поменялась - модель перестанет обновляться, статичный контракт
+      tags: ['orders'] # тэги позволяют обращаться ко всем моделям с одинаковым тэгом, например dbt build --select 'tag:orders'
+      contract:
+        enforced: true # указываем, что работаем по контаркту - вернутся только те колонки, которые указаны в разделе columns данного файла
+    meta: # различная метаинформация в паре ключ-значения, могут быть произвольными
+      owner: DWH_dev_team
+      contact: link_to_contact
+    columns:
+      - name: OrderID
+        data_type: String
+        constraints:
+          - type: not_null
+      - name: OrderDate
+        data_type: String
+      - name: ProductName
+        data_type: String
+      - name: ProductBrand
+        data_type: String
+      - name: ProductSubcategory
+        data_type: String
+      - name: ProductCategory
+        data_type: String
+      - name: DeliveryType
+        data_type: String
+      - name: PaymentType
+        data_type: String
+      - name: ClientGender
+        data_type: String
+      - name: Sales
+        data_type: Int32
+        constraints:
+          - type: check
+            expression: "Sales > 0"
+        meta:
+          source: marketing
+      - name: ClientStatus
+        data_type: String
+      - name: ShopName
+        data_type: String
+      - name: ShopAddress
+        data_type: String
+      - name: ShopAddressCoord
+        data_type: String
+      - name: DeliveryDistrictName
+        data_type: String
+      - name: dt_load
+        data_type: DateTime

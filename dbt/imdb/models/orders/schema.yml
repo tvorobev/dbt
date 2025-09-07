@@ -15,10 +15,16 @@ sources:
         description: "*Name Delivery District*"
         tests:
           - not_null
-  - name: orders
+  - name: order_norm
     description: data from REST API <host> about orders, ETL on Spark
     columns:
       - name: OrderID
         description: ID order 
       - name: OrderDate
         description: Date orders
+    freshness: # проверки свежести данных - запускается командой dbt source freshness
+      warn_after: {count: 6, period: hour} # ворнинг если более 6 часов нет свежих записей в источнике
+      error_after: {count: 12, period: hour} # ошибка если более 12 часов нет свежих записей в источнике
+      # фильтр, чтобы тянуть не всю таблицу, а инкрементально проверять - берем последние 24 часа
+      filter: datediff('hour', cast(dt_load as timestamp), cast(now() as timestamp)) < 24
+    loaded_at_field: cast(dt_load as timestamp)

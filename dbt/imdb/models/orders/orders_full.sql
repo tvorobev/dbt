@@ -1,5 +1,12 @@
--- метод материализации, то есть просто вьюха, если нужна таблица - materialized='table', дальше реализуем это
+-- метод материализации - таблица, будет в таблицу с названием файла постоянно вставлять записи,
+-- получившиеся в результате выполнения логики модели, предварительно очистив таблицу
+
 {{ config(materialized='table') }}
 
-select * from {{ source('default', 'orders') }} join {{ source('default', 'district') }} 
-on {{ source('default', 'orders') }}.OrderID = {{ source('default', 'district') }}.OrderID
+select * from {{ source('default', 'order_norm') }} t1 join {{ source('default', 'district') }} t2
+on t1.OrderID = t2.OrderID
+
+-- как пример - можно использовать jinja для многих вещей. например, если окружение dev - то добавляем limit 100, чтобы не дергать всю таблицу
+{% if target.name=='dev' %}
+limit 100
+{% endif %}

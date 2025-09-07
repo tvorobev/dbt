@@ -1,0 +1,17 @@
+# снапшоты - полезная вещь для SCD2 при DataVault. Данный снапшот - инкрементальный. Ранится командой dbt snapshot ну и со всеми флагами аля --select
+snapshots:
+  - name: ss_fact_orders_full # имя таблицы и снапшота
+    relation: ref('orders_full') # поверх какой таблицы строить, можно указывать несколько
+    config:
+      database: default # база данных
+      unique_key: OrderID # уникальный ключ, по которому нужно делать SCD2
+      strategy: timestamp # стратегия - инкрементальная
+      updated_at: dt_load # по какой колонке отслеживать изменения
+      dbt_valid_to_current: "toDate('2100-12-31')" # затычка, если будущее неизвестно - то тогда модель актуально по эту дату
+      hard_deletes: new_record # если строка удаляется - то проставляем valid_to и создаем новую стркоу, в которой флаг is_deleted будет равен True
+      snapshot_meta_column_names: # переименовываем поля SCD2, которые создаст dbt, но почему-то ему плевать на это, видимо баг. но в теории можно
+        dbt_valid_from: dbt_valid_from
+        dbt_valid_to: dbt_valid_to
+        dbt_scd_id: dbt_scd_id
+        dbt_updated_at: dbt_updated_at
+        dbt_is_deleted: dbt_is_deleted
